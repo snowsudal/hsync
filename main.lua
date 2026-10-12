@@ -124,10 +124,10 @@ local function StartHeartbeatLoop()
                 task.spawn(function()
                     if AuthGate and MainFrame then
                         AuthGate.Visible = true
-                        LogToGate("인증 서버 오프라인 감지됨.", Color3.fromRGB(251, 113, 113))
-                        LogToGate("[보안] 모든 기능이 강제 잠금되었습니다.", Color3.fromRGB(251, 113, 113))
+                        LogToGate("인증 서버 오프라인", Color3.fromRGB(251, 113, 113))
+                        LogToGate("[aUTH] Locked", Color3.fromRGB(251, 113, 113))
                     end
-                    AddUiLog("[로그아웃] 서버 다운이 감지되어 패널이 차단되었습니다.")
+                    AddUiLog("[aUTH] Logout.")
                 end)
                 break
             end
@@ -207,11 +207,11 @@ local function ExecuteAutomatedTest(position, speed, isStrike)
     local arrivalDuration = math.max(0.01, baseDuration + _G.TimingOffset + directionTimingModifier)
     
     if not _G.AutoStrikeTestActive then 
-        AddUiLog(string.format("speed: %s MPH", tostring(speed)))
+        AddUiLog(string.format("speed: %s km/h", tostring(speed)))
         return 
     end
     if not isStrike then 
-        AddUiLog(string.format("BALL (%s MPH)", tostring(speed))) 
+        AddUiLog(string.format("BALL (%s km/h)", tostring(speed))) 
         return 
     end
     
@@ -356,9 +356,9 @@ SubmitButton.MouseButton1Click:Connect(function()
 local text = string.gsub(InputBox.Text, "^%s*(.-)%s*$", "%1")
 if text == "" then LogToGate("입력값이 비어 있습니다.", Color3.fromRGB(248, 113, 113)) return end
 LogToGate("[Load] Connect By Server...", Color3.fromRGB(255, 255, 0))
-task.wait(0.05)
+task.wait(0.5)
 LogToGate("[Load] Authenticating...", Color3.fromRGB(255, 255, 0))
-task.wait(0.05)
+task.wait(1.5)
 local queryURL = string.format(
 "%s/verify?key=%s&username=%s&userId=%s",
 API_URL,
@@ -379,10 +379,10 @@ if responseCode == 200 or responseCode == "200" then
 local jsonSuccess, responseData = pcall(function() return HttpService:JSONDecode(response.Body) end)
 if jsonSuccess and responseData and responseData.success == true then
 LogToGate("[Load] Verify! Load ServerEvent...", Color3.fromRGB(255, 255, 0))
-task.wait(0.1)
+task.wait(0.5)
 IsAuthenticated = true
 AuthGate.Visible = false
-AddUiLog("[Load] Loaded! UI 잠금이 전면 해제되었습니다.", Color3.fromRGB(255, 255, 0))
+AddUiLog("[Load] Loaded!", Color3.fromRGB(255, 255, 0))
 -- 캐시 파쇄형 허브 감지 서킷 시동
 StartHeartbeatLoop()
 else
@@ -456,11 +456,11 @@ if not _G.AutoStrikeTestActive then TestTargetCFrame = nil end
 return _G.AutoStrikeTestActive
 end)
 ButtonInstances["StrikeZone"] = CreateAppleButton("[ON] StrikeZone", "[OFF] StrikeZone", 122, _G.ZoneKeeperActive, function()
-_G.ZoneKeeperActive = not _G.ZoneKeeperActive
+--_G.ZoneKeeperActive = not _G.ZoneKeeperActive
 return _G.ZoneKeeperActive
 end)
 ButtonInstances["Trajectory"] = CreateAppleButton("[ON] 궤적", "[OFF] 궤적", 158, _G.TrajectoryLineActive, function()
-_G.TrajectoryLineActive = not _G.TrajectoryLineActive
+--_G.TrajectoryLineActive = not _G.TrajectoryLineActive
 return _G.TrajectoryLineActive
 end)
 ButtonInstances["AutoBP"] = CreateAppleButton("[ON] Auto BP", "[OFF] Auto BP", 194, _G.AutoEActive, function()
